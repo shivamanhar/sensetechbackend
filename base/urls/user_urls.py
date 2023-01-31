@@ -19,5 +19,6 @@ urlpatterns = [
     path('delete/<str:pk>/', views.deleteUser, name='user-delete'),
 
     path('sendemail', views.sendEmail, name='sendemail'),
-    path('userprofile', views.userprofile, name='userprofile')
+    path('userprofile', views.userprofile, name='userprofile'),
+    path('getstate', views.getState, name='getstate')
 ]

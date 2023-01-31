@@ -10,9 +10,13 @@ class State(models.Model):
     state_name_local = models.CharField(max_length=255, blank=True, null=True)
     state_or_ut = models.CharField(max_length=255, blank=True, null=True)
 
+    def __str__(self):
+        return self.state_name_en
+
     class Meta:
         managed = False
         db_table = 'state'
+
 
 class District(models.Model):
     slno = models.CharField(max_length=255, blank=True, null=True)
@@ -21,6 +25,9 @@ class District(models.Model):
     district_code = models.IntegerField(primary_key=True)
     district_name = models.CharField(max_length=255, blank=True, null=True)
     f6 = models.CharField(db_column='F6', max_length=255, blank=True, null=True)  # Field name made lowercase.
+
+    def __str__(self):
+        return self.district_name
 
     class Meta:
         managed = False

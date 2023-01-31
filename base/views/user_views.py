@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 
 from django.contrib.auth.models import User
-from base.serializers import  UserSerializer, UserSerializerWithToken, ProfileSerializer
+from base.serializers import  UserSerializer, UserSerializerWithToken, ProfileSerializer, StateSerializer, DistrictSerializer
 # Create your views here.
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -40,7 +40,6 @@ def registerUser(request):
             email=data['email'],
             password=make_password(data['password'])
         )
-
         serializer = UserSerializerWithToken(user, many=False)
         return Response(serializer.data)
     except:
@@ -141,3 +140,10 @@ def userprofile(request):
         return Response(serializer.data)
     except:
         return Response({'message':'Record not found'})
+
+
+@api_view(['GET'])
+def getState(request):
+    state = State.objects.all()
+    serializer = StateSerializer(state, many=True)
+    return Response(serializer.data)
