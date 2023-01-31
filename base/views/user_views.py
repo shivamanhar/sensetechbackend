@@ -4,14 +4,16 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 
 from django.contrib.auth.models import User
-from base.serializers import  UserSerializer, UserSerializerWithToken
+from base.serializers import  UserSerializer, UserSerializerWithToken, ProfileSerializer
 # Create your views here.
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from django.contrib.auth.hashers import make_password
 from rest_framework import status
+from base.models import Profile, State, District
 
+import smtplib
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
@@ -114,3 +116,25 @@ def deleteUser(request, pk):
     userForDeletion = User.objects.get(id=pk)
     userForDeletion.delete()
     return Response('User was deleted')
+
+@api_view(['GET'])
+def sendEmail(request):
+    sender = 'shivamanhar@gmail.com'
+    receivers = ['shivamanhar@gmail.com']
+    message = "Test email"
+    try:
+        smtpObj = smtplib.SMTP('localhost')
+        smtpObj.sendmail(sender, receivers, message)
+        print ("Successfull send email")
+    except:
+        print ("Error: unable to send email")
+
+    return Response("Send email")
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def userprofile(request):
+  
+    profile = Profile.objects.get(userid = 1)
+    serializer = ProfileSerializer(profile, many=False)
+    return Response(serializer.data)

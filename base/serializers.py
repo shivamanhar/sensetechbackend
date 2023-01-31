@@ -2,6 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from base.models import Profile, State, District
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -37,3 +38,13 @@ class UserSerializerWithToken(UserSerializer):
     def get_token(self, obj):
         token = RefreshToken.for_user(obj)
         return str(token.access_token)
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    distrinctname = serializers.CharField(source='district.district_name', read_only=True)
+    statename = serializers.CharField(source='state.state_name_en', read_only=True)
+
+    class Meta:
+        model = Profile
+        fields = '__all__'
+        #depth = 1
