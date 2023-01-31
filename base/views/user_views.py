@@ -101,7 +101,7 @@ def updateUser(request, pk):
     user.first_name = data['name']
     user.username = data['email']
     user.email = data['email']
-    user.is_staff = data['isAdmin']
+    user.is_staff = 1  #data['isAdmin']
 
     user.save()
 
@@ -134,7 +134,10 @@ def sendEmail(request):
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def userprofile(request):
-  
-    profile = Profile.objects.get(userid = 1)
-    serializer = ProfileSerializer(profile, many=False)
-    return Response(serializer.data)
+    print(request.GET['id'])
+    try:
+        profile = Profile.objects.get(userid = request.GET['id'])
+        serializer = ProfileSerializer(profile, many=False)
+        return Response(serializer.data)
+    except:
+        return Response({'message':'Record not found'})
